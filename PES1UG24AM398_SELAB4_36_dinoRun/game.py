@@ -141,7 +141,7 @@ class Game:
         if hit:
             self.state = "lose"
             current = self.score // 10
-            if self.high_score > current:
+            if current > self.high_score:
                 self.high_score = current
                 save_high_score(self.high_score)
             return
