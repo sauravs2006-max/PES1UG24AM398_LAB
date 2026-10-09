@@ -16,9 +16,12 @@ def dino_tint(on_ground):
     return None  # default green
 
 
+combo = 0
+
 def on_obstacle_passed(obstacle, score):
-    """Called once, the frame an obstacle finishes scrolling past the dino. Add a sound or a combo counter here."""
-    pass
+    global combo
+    combo += 1
+    print(f"Obstacle cleared! Combo: {combo}, Score: {score}")
 
 
 def max_jumps():
