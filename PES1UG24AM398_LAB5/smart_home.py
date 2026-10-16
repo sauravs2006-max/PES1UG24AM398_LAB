@@ -4,7 +4,7 @@ import subprocess  # nosec B404 - needed by runScene, input is validated
 
 HUB_HOST = os.environ.get("HUB_HOST", "127.0.0.1")
 HUB_PORT = 8080
-POWER_USAGE = {"light" : 10, "fan": 60, "thermostat": 1500, "tv": 120}
+POWER_USAGE = {"light": 10, "fan": 60, "thermostat": 1500, "tv": 120}
 HUB_PASSWORD = os.environ.get("HUB_PASSWORD")
 devices = {}
 
@@ -38,6 +38,7 @@ def powerUsage():
     active = [info for info in devices.values() if info["on"]]
     return sum(POWER_USAGE.get(info["kind"], 0) for info in active)
 
+
 def saveState(fileName="home_state.json"):
     with open(fileName, "w") as f:
         json.dump(devices, f, indent=2)
@@ -70,9 +71,10 @@ def main():
     setTemperature("Ceiling Light", 20)
     print("Bedroom devices:", devicesInRoom("Bedroom"))
     print("Current power use (W):", powerUsage())
-    print("Hub address:", hubAddress()) # for app setup
+    print("Hub address:", hubAddress())  # for app setup
     print("Light settings:", devices["Ceiling Light"]["settings"])
-    print("Devices on:", [name for name, info in devices.items() if info["on"]])
+    on_now = [name for name, info in devices.items() if info["on"]]
+    print("Devices on:", on_now)
     saveState()
 
 
