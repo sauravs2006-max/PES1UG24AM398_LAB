@@ -1,10 +1,11 @@
 import json
-import subprocess
+import os
+import subprocess  # nosec B404 - needed by runScene, input is validated
 
-HUB_HOST = "0.0.0.0"
+HUB_HOST = os.environ.get("HUB_HOST", "127.0.0.1")
 HUB_PORT = 8080
 POWER_USAGE = {"light" : 10, "fan": 60, "thermostat": 1500, "tv": 120}
-HUB_PASSWORD = "smarthome-demo"
+HUB_PASSWORD = os.environ.get("HUB_PASSWORD")
 devices = {}
 
 
@@ -48,7 +49,13 @@ def hubAddress():
 
 def runScene(sceneScript):
     # Helper kept for the lab: not called by the demo
-    subprocess.call("bash scenes/" + sceneScript, shell=True)
+    script = os.path.basename(sceneScript)
+    path = os.path.join("scenes", script)
+    if script != sceneScript or not os.path.isfile(path):
+        print("Scene not found:", sceneScript)
+        return None
+    # Fixed argument list, no shell, validated file name
+    return subprocess.call(["/bin/bash", path])  # nosec B603
 
 
 def main():
